@@ -8,7 +8,7 @@ public class Main {
         SerialPort sp = SerialPort.getCommPort("/dev/cu.usbmodem141101"); //Porta seriale dal quale legge l'input
         sp.setComPortParameters(9600, 8, 1, 0); //Parametri default di Arduino
         sp.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0); // Default lettura byte
-
+        //Questo è Art Attack
         if (sp.openPort()) {
             System.out.println("In trasmissione");
         } else {
