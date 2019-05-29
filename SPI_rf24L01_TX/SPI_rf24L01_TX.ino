@@ -12,7 +12,11 @@
 **   MISO - to digital pin 12 (MISO pin)                            **
 **   CLK - to digital pin 13  (SCK pin)                             **
 *********************************************************************/
-
+#include <DHT.h>
+#include "DHT.h"
+#define DHTPIN 2
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
 #include <SPI.h>
 #include "API.h"
 #include "nRF24L01.h"
@@ -45,8 +49,10 @@ void setup()
 }
 
 void loop() 
-{
-    tx_buf[0] = 5;        
+{ 
+    int temperatura=dht.readTemperature();
+    int umidita=dht.readHumidity();
+    tx_buf[0] = temperatura;        
     unsigned int sstatus = SPI_Read(STATUS);                   // read register STATUS's value
     if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
     {
