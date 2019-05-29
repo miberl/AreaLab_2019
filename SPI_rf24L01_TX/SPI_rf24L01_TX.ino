@@ -19,7 +19,7 @@
 
 //***************************************************
 #define TX_ADR_WIDTH    5   // 5 unsigned chars TX(RX) address width
-#define TX_PLOAD_WIDTH  32  // 32 unsigned chars TX payload
+#define TX_PLOAD_WIDTH  1  // 32 unsigned chars TX payload
 
 unsigned char TX_ADDRESS[TX_ADR_WIDTH]  = 
 {
@@ -50,8 +50,8 @@ void loop()
   int k = 0;
   for(;;)
   {
-    for(int i=0; i<32; i++)
-        tx_buf[i] = k++;        
+    for(int i=0; i<1; i++)
+        tx_buf[i] = 'a';        
     unsigned char sstatus = SPI_Read(STATUS);                   // read register STATUS's value
     if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
     {
