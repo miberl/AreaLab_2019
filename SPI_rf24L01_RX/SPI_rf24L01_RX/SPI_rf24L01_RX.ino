@@ -55,12 +55,9 @@ void loop()
     {
       SPI_Read_Buf(RD_RX_PLOAD, rx_buf, TX_PLOAD_WIDTH);             // read playload to rx_buf
       SPI_RW_Reg(FLUSH_RX,0);                                        // clear RX_FIFO
-      for(int i=0; i<1; i++)
-      {
-          Serial.print(" ");
-          Serial.print((int)rx_buf[i]);                              // print rx_buf
-      }
-      Serial.println(" ");
+          Serial.print("Temperatura: ");
+          Serial.print(rx_buf[0]);                              // print rx_buf
+          Serial.println(" ");
     }
     SPI_RW_Reg(WRITE_REG+STATUS,status);                             // clear RX_DR or TX_DS or MAX_RT interrupt flag
     delay(1000);
