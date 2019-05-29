@@ -18,16 +18,15 @@
 #include "nRF24L01.h"
 
 //***************************************************
-#define TX_ADR_WIDTH    5   // 5 unsigned chars TX(RX) address width
-#define TX_PLOAD_WIDTH  1  // 32 unsigned chars TX payload
+#define TX_ADR_WIDTH    5   // 5 unsigned ints TX(RX) address width
+#define TX_PLOAD_WIDTH  1  // 32 unsigned ints TX payload
 
-unsigned char TX_ADDRESS[TX_ADR_WIDTH]  = 
+unsigned int TX_ADDRESS[TX_ADR_WIDTH]  = 
 {
   0x34,0x43,0x10,0x10,0x01
 }; // Define a static TX address
 
-unsigned char rx_buf[TX_PLOAD_WIDTH] = {0}; // initialize value
-unsigned char tx_buf[TX_PLOAD_WIDTH] = {0};
+unsigned int tx_buf[TX_PLOAD_WIDTH] = {0};
 //***************************************************
 void setup() 
 {
@@ -38,7 +37,7 @@ void setup()
   SPI.begin();
   delay(50);
   init_io();                        // Initialize IO port
-  unsigned char sstatus=SPI_Read(STATUS);
+  unsigned int sstatus=SPI_Read(STATUS);
   Serial.println("*******************TX_Mode Start****************************");
   Serial.print("status = ");    
   Serial.println(sstatus,HEX);     // There is read the mode’s status register, the default value should be ‘E’
@@ -47,12 +46,8 @@ void setup()
 
 void loop() 
 {
-  int k = 0;
-  for(;;)
-  {
-    for(int i=0; i<1; i++)
-        tx_buf[i] = 'a';        
-    unsigned char sstatus = SPI_Read(STATUS);                   // read register STATUS's value
+    tx_buf[0] = 5;        
+    unsigned int sstatus = SPI_Read(STATUS);                   // read register STATUS's value
     if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
     {
       SPI_RW_Reg(FLUSH_TX,0);                                  
@@ -65,7 +60,7 @@ void loop()
     }
     SPI_RW_Reg(WRITE_REG+STATUS,sstatus);                     // clear RX_DR or TX_DS or MAX_RT interrupt flag
     delay(1000);
-  }
+  
 }
 
 //**************************************************
@@ -85,10 +80,10 @@ void init_io(void)
 **   * Function: SPI_RW();
  * 
  * Description:
- * Writes one unsigned char to nRF24L01, and return the unsigned char read
+ * Writes one  int to nRF24L01, and return the  int read
  * from nRF24L01 during write, according to SPI protocol
 ************************************************************************/
-unsigned char SPI_RW(unsigned char Byte)
+ int SPI_RW( int Byte)
 {
   return SPI.transfer(Byte);
 }
@@ -101,16 +96,16 @@ unsigned char SPI_RW(unsigned char Byte)
  * Description:
  * Writes value 'value' to register 'reg'
 /**************************************************/
-unsigned char SPI_RW_Reg(unsigned char reg, unsigned char value)
+ int SPI_RW_Reg( int reg,  int value)
 {
-  unsigned char status;
+   int status;
 
   digitalWrite(CSN, 0);                   // CSN low, init SPI transaction
   SPI_RW(reg);                            // select register
   SPI_RW(value);                          // ..and write value to it..
   digitalWrite(CSN, 1);                   // CSN high again
 
-  return(status);                   // return nRF24L01 status unsigned char
+  return(status);                   // return nRF24L01 status  int
 }
 /**************************************************/
 
@@ -118,11 +113,11 @@ unsigned char SPI_RW_Reg(unsigned char reg, unsigned char value)
  * Function: SPI_Read();
  * 
  * Description:
- * Read one unsigned char from nRF24L01 register, 'reg'
+ * Read one  int from nRF24L01 register, 'reg'
 /**************************************************/
-unsigned char SPI_Read(unsigned char reg)
+ int SPI_Read( int reg)
 {
-  unsigned char reg_val;
+   int reg_val;
 
   digitalWrite(CSN, 0);                // CSN low, initialize SPI communication...
   SPI_RW(reg);                         // Select register to read from..
@@ -133,29 +128,6 @@ unsigned char SPI_Read(unsigned char reg)
 }
 /**************************************************/
 
-/**************************************************
- * Function: SPI_Read_Buf();
- * 
- * Description:
- * Reads 'unsigned chars' #of unsigned chars from register 'reg'
- * Typically used to read RX payload, Rx/Tx address
-/**************************************************/
-unsigned char SPI_Read_Buf(unsigned char reg, unsigned char *pBuf, unsigned char bytes)
-{
-  unsigned char sstatus,i;
-
-  digitalWrite(CSN, 0);                   // Set CSN low, init SPI tranaction
-  sstatus = SPI_RW(reg);       	    // Select register to write to and read status unsigned char
-
-  for(i=0;i<bytes;i++)
-  {
-    pBuf[i] = SPI_RW(0);    // Perform SPI_RW to read unsigned char from nRF24L01
-  }
-
-  digitalWrite(CSN, 1);                   // Set CSN high again
-
-  return(sstatus);                  // return nRF24L01 status unsigned char
-}
 /**************************************************/
 
 /**************************************************
@@ -165,20 +137,19 @@ unsigned char SPI_Read_Buf(unsigned char reg, unsigned char *pBuf, unsigned char
  * Writes contents of buffer '*pBuf' to nRF24L01
  * Typically used to write TX payload, Rx/Tx address
 /**************************************************/
-unsigned char SPI_Write_Buf(unsigned char reg, unsigned char *pBuf, unsigned char bytes)
+ int SPI_Write_Buf( int reg,  int *pBuf,  int bytes)
 {
-  unsigned char sstatus,i;
+   int sstatus,i;
 
   digitalWrite(CSN, 0);                   // Set CSN low, init SPI tranaction
-  sstatus = SPI_RW(reg);             // Select register to write to and read status unsigned char
-  for(i=0;i<bytes; i++)             // then write all unsigned char in buffer(*pBuf)
+  sstatus = SPI_RW(reg);             // Select register to write to and read status  int
+  for(i=0;i<bytes; i++)             // then write all  int in buffer(*pBuf)
   {
     SPI_RW(*pBuf++);
   }
   digitalWrite(CSN, 1);                   // Set CSN high again
-  return(sstatus);                  // return nRF24L01 status unsigned char
+  return(sstatus);                  // return nRF24L01 status  int
 }
-/**************************************************/
 
 /**************************************************
  * Function: TX_Mode();
@@ -187,7 +158,7 @@ unsigned char SPI_Write_Buf(unsigned char reg, unsigned char *pBuf, unsigned cha
  * This function initializes one nRF24L01 device to
  * TX mode, set TX address, set RX address for auto.ack,
  * fill TX payload, select RF channel, datarate & TX pwr.
- * PWR_UP is set, CRC(2 unsigned chars) is enabled, & PRIM:TX.
+ * PWR_UP is set, CRC(2  ints) is enabled, & PRIM:TX.
  * 
  * ToDo: One high pulse(>10us) on CE will now send this
  * packet and expext an acknowledgment from the RX device.
@@ -204,7 +175,7 @@ void TX_Mode(void)
   SPI_RW_Reg(WRITE_REG + SETUP_RETR, 0x1a); // 500us + 86us, 10 retrans...
   SPI_RW_Reg(WRITE_REG + RF_CH, 40);        // Select RF channel 40
   SPI_RW_Reg(WRITE_REG + RF_SETUP, 0x07);   // TX_PWR:0dBm, Datarate:2Mbps, LNA:HCURR
-  SPI_RW_Reg(WRITE_REG + CONFIG, 0x0e);     // Set PWR_UP bit, enable CRC(2 unsigned chars) & Prim:TX. MAX_RT & TX_DS enabled..
+  SPI_RW_Reg(WRITE_REG + CONFIG, 0x0e);     // Set PWR_UP bit, enable CRC(2  ints) & Prim:TX. MAX_RT & TX_DS enabled..
   SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);
 
   digitalWrite(CE, 1);
