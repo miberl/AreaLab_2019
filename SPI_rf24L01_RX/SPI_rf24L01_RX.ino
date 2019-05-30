@@ -20,7 +20,7 @@
 
 //***************************************************
 #define TX_ADR_WIDTH    5   // 5  ints TX(RX) address width
-#define TX_PLOAD_WIDTH  2  // 32  ints TX payload
+#define TX_PLOAD_WIDTH  3  // 32  ints TX payload
 
  int TX_ADDRESS[TX_ADR_WIDTH]  = 
 {
@@ -54,13 +54,15 @@ void loop()
     if(status&RX_DR)                                                 // if receive data ready (TX_DS) interrupt
     {
       SPI_Read_Buf(RD_RX_PLOAD, rx_buf, TX_PLOAD_WIDTH);             // read playload to rx_buf
-      SPI_RW_Reg(FLUSH_RX,0);                                        // clear RX_FIFO
+      SPI_RW_Reg(FLUSH_RX,0);
+      if(rx_buf[2]==1){
           Serial.print("Temperatura: ");
           Serial.print(rx_buf[0]);                              // print rx_buf
           Serial.println(" ");
           Serial.print("Umidita ");
           Serial.print(rx_buf[1]);
           Serial.println(" ");
+      }
     }
     SPI_RW_Reg(WRITE_REG+STATUS,status);                             // clear RX_DR or TX_DS or MAX_RT interrupt flag
     delay(1000);
