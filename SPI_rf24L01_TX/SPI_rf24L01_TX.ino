@@ -20,10 +20,10 @@ DHT dht(DHTPIN, DHTTYPE);
 #include <SPI.h>
 #include "API.h"
 #include "nRF24L01.h"
-
+int letturainput=7;
 //***************************************************
 #define TX_ADR_WIDTH    5   // 5 unsigned ints TX(RX) address width
-#define TX_PLOAD_WIDTH  2  // 32 unsigned ints TX payload
+#define TX_PLOAD_WIDTH  3  // 32 unsigned ints TX payload
 
 unsigned int TX_ADDRESS[TX_ADR_WIDTH]  = 
 {
@@ -50,24 +50,26 @@ void setup()
 
 void loop() 
 { 
-    int temperatura=dht.readTemperature();
-    int umidita=dht.readHumidity();
-    tx_buf[0] = temperatura;
-    tx_buf[1] = umidita;
-    unsigned int sstatus = SPI_Read(STATUS);                   // read register STATUS's value
-    if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
-    {
-      SPI_RW_Reg(FLUSH_TX,0);                                  
-      SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);       // write playload to TX_FIFO
-    }
-    if(sstatus&MAX_RT)                                         // if receive data ready (MAX_RT) interrupt, this is retransmit than  SETUP_RETR                          
-    {
-      SPI_RW_Reg(FLUSH_TX,0);
-      SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);      // disable standy-mode
-    }
-    SPI_RW_Reg(WRITE_REG+STATUS,sstatus);                     // clear RX_DR or TX_DS or MAX_RT interrupt flag
-    delay(1000);
-  
+      int valoreletto=digitalRead(letturainput);
+      int temperatura=dht.readTemperature();
+      int umidita=dht.readHumidity();
+      tx_buf[0] = temperatura;
+      tx_buf[1] = umidita;
+      tx_buf[2] = valoreletto;
+      unsigned int sstatus = SPI_Read(STATUS);                   // read register STATUS's value
+ 
+      if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
+      {
+        SPI_RW_Reg(FLUSH_TX,0);                                  
+        SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);       // write playload to TX_FIFO
+      }
+      if(sstatus&MAX_RT)                                         // if receive data ready (MAX_RT) interrupt, this is retransmit than  SETUP_RETR                          
+      {
+        SPI_RW_Reg(FLUSH_TX,0);
+        SPI_Write_Buf(WR_TX_PLOAD,tx_buf,TX_PLOAD_WIDTH);      // disable standy-mode
+      }
+      SPI_RW_Reg(WRITE_REG+STATUS,sstatus);                     // clear RX_DR or TX_DS or MAX_RT interrupt flag
+      delay(1000);
 }
 
 //**************************************************
