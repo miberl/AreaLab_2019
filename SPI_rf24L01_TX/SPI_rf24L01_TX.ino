@@ -23,7 +23,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 //***************************************************
 #define TX_ADR_WIDTH    5   // 5 unsigned ints TX(RX) address width
-#define TX_PLOAD_WIDTH  1  // 32 unsigned ints TX payload
+#define TX_PLOAD_WIDTH  2  // 32 unsigned ints TX payload
 
 unsigned int TX_ADDRESS[TX_ADR_WIDTH]  = 
 {
@@ -52,7 +52,8 @@ void loop()
 { 
     int temperatura=dht.readTemperature();
     int umidita=dht.readHumidity();
-    tx_buf[0] = temperatura;        
+    tx_buf[0] = temperatura;
+    tx_buf[1] = umidita;
     unsigned int sstatus = SPI_Read(STATUS);                   // read register STATUS's value
     if(sstatus&TX_DS)                                           // if receive data ready (TX_DS) interrupt
     {
