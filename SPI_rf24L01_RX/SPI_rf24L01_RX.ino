@@ -48,25 +48,20 @@ void setup()
 
 void loop() 
 {
-  for(;;)
-  {
-     int status = SPI_Read(STATUS);                         // read register STATUS's value
+    int status = SPI_Read(STATUS);                         // read register STATUS's value
     if(status&RX_DR)                                                 // if receive data ready (TX_DS) interrupt
     {
       SPI_Read_Buf(RD_RX_PLOAD, rx_buf, TX_PLOAD_WIDTH);             // read playload to rx_buf
       SPI_RW_Reg(FLUSH_RX,0);
       if(rx_buf[2]==1){
-          Serial.print("Temperatura: ");
+          Serial.print("T");
           Serial.print(rx_buf[0]);                              // print rx_buf
-          Serial.println(" ");
-          Serial.print("Umidita ");
-          Serial.print(rx_buf[1]);
-          Serial.println(" ");
+          Serial.print("U");
+          Serial.println(rx_buf[1]);
       }
     }
     SPI_RW_Reg(WRITE_REG+STATUS,status);                             // clear RX_DR or TX_DS or MAX_RT interrupt flag
     delay(1000);
-  }
 }
 
 //**************************************************
