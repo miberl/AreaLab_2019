@@ -8,3 +8,6 @@ Abbiamo finito di scrivere il programma java che legge i valori da seriale, ques
 
 Progresso 29/05:
 Oggi siamo riusciti a far comunicare due Antenne wireless ognuna collegata al proprio Arduino, TX invia i dati della temperatura e dell'umidità, RX li riceve e li trasmette a sua volta al PC.
+
+Progresso 30/05: 
+Abbiamo adottato un protocollo standard per la trasmissione seriale da Arduino RX, per poterla rendere piú omogenea.
