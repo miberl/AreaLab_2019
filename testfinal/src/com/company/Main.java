@@ -12,6 +12,23 @@ public class Main {
         else
             return false;
     }
+    public static String temperatura(String s){
+        String q=s.substring(1);
+        int i=0;
+        char umi;
+        String temp="";
+        while(q.charAt(i)!='U'){
+            temp+=q.charAt(i);
+            i++;
+        }
+        return temp;
+    }
+    public static String umidita(String s){
+        int i=0;
+        while (s.charAt(i)!='U')
+            i++;
+        return s.substring(i);
+    }
     public static void main(String[] args) throws IOException, InterruptedException {
 
         SerialPort sp = SerialPort.getCommPort("/dev/cu.usbmodem143101"); //Porta seriale dal quale legge l'input
@@ -23,7 +40,8 @@ public class Main {
             System.out.println("Errore: porta seriale non collegata!");
             return;
         }
-        int rigadariscrivere=31;
+        int rigatemperatura=31;
+        int rigaumidita;
         InputStream in = sp.getInputStream();
         try
         {
@@ -40,7 +58,8 @@ public class Main {
                     righelette[i]=riga;
                     i++;
                 }
-                righelette[rigadariscrivere]=s;
+                righelette[rigatemperatura]=temperatura(s);
+                righelette[rigaumidita]=umidita(s);
                 fr.close();
                 BufferedWriter fw = new BufferedWriter(new FileWriter("Sito.html"));
                 for (int j = 0; j < 38; j++) {
