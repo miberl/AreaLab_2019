@@ -17,7 +17,7 @@ public class Main {
         int i=0;
         char umi;
         String temp="";
-        while(q.charAt(i)!='U'){
+        while(q.charAt(i)!='U'&&i<s.length()-2){
             temp+=q.charAt(i);
             i++;
         }
@@ -25,9 +25,9 @@ public class Main {
     }
     public static String umidita(String s){
         int i=0;
-        while (s.charAt(i)!='U')
+        while (s.charAt(i)!='U'&&i<s.length()-1)
             i++;
-        return s.substring(i);
+        return s.substring(i+1);
     }
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -40,8 +40,8 @@ public class Main {
             System.out.println("Errore: porta seriale non collegata!");
             return;
         }
-        int rigatemperatura=31;
-        int rigaumidita;
+        int rigatemperatura=27;
+        int rigaumidita=36;
         InputStream in = sp.getInputStream();
         try
         {
@@ -52,7 +52,7 @@ public class Main {
                     s += z;
                 BufferedReader fr = new BufferedReader(new FileReader("Sito.html"));
                 String riga;
-                String righelette[]=new String [38];
+                String righelette[]=new String [49];
                 int i=0;
                 while((riga=fr.readLine())!=null){
                     righelette[i]=riga;
