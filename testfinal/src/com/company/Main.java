@@ -30,7 +30,6 @@ public class Main {
         return s.substring(i+1);
     }
     public static void main(String[] args) throws IOException, InterruptedException {
-
         SerialPort sp = SerialPort.getCommPort("/dev/cu.usbmodem143101"); //Porta seriale dal quale legge l'input
         sp.setComPortParameters(9600, 8, 1, 0); //Parametri default di Arduino
         sp.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0); // Default lettura byte
@@ -62,7 +61,7 @@ public class Main {
                     s += z;
                 righelette[rigatemperatura]=temperatura(s);
                 righelette[rigaumidita]=umidita(s);
-                                BufferedWriter fw = new BufferedWriter(new FileWriter("Sito.html"));
+                BufferedWriter fw = new BufferedWriter(new FileWriter("Sito.html"));
                 for (int j = 0; j < righedelfile; j++) {
                     fw.write(righelette[j]);
                     fw.newLine();
