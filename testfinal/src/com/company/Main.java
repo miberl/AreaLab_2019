@@ -43,6 +43,16 @@ public class Main {
         int rigatemperatura=27;
         int rigaumidita=36;
         InputStream in = sp.getInputStream();
+        BufferedReader fr = new BufferedReader(new FileReader("Sito.html"));
+        String riga;
+        int righedelfile=49;
+        String righelette[]=new String [righedelfile];
+        int i=0;
+	    while((riga=fr.readLine())!=null){
+	        righelette[i]=riga;
+	            i++;
+	    }
+	    fr.close();
         try
         {
             while(true) {
@@ -50,19 +60,10 @@ public class Main {
                 char z;
                 while (!newline(z = (char) in.read()))
                     s += z;
-                BufferedReader fr = new BufferedReader(new FileReader("Sito.html"));
-                String riga;
-                String righelette[]=new String [49];
-                int i=0;
-                while((riga=fr.readLine())!=null){
-                    righelette[i]=riga;
-                    i++;
-                }
                 righelette[rigatemperatura]=temperatura(s);
                 righelette[rigaumidita]=umidita(s);
-                fr.close();
-                BufferedWriter fw = new BufferedWriter(new FileWriter("Sito.html"));
-                for (int j = 0; j < 38; j++) {
+                                BufferedWriter fw = new BufferedWriter(new FileWriter("Sito.html"));
+                for (int j = 0; j < righedelfile; j++) {
                     fw.write(righelette[j]);
                     fw.newLine();
                 }
