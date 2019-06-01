@@ -11,3 +11,7 @@ Oggi siamo riusciti a far comunicare due Antenne wireless ognuna collegata al pr
 
 Progresso 30/05: 
 Abbiamo adottato un protocollo standard per la trasmissione seriale da Arduino RX, per poterla rendere piú omogenea.
+
+Progresso 31/05:
+Inizio sito web: fatto l'html e css per la visualizzazione della temperatura e dell'umidità.
+
