@@ -10,8 +10,11 @@ Progresso 29/05:
 Oggi siamo riusciti a far comunicare due Antenne wireless ognuna collegata al proprio Arduino, TX invia i dati della temperatura e dell'umidità, RX li riceve e li trasmette a sua volta al PC.
 
 Progresso 30/05: 
-Abbiamo adottato un protocollo standard per la trasmissione seriale da Arduino RX, per poterla rendere piú omogenea.
+Abbiamo adottato un protocollo standard per la trasmissione seriale da Arduino RX, per poterla rendere più omogenea.
 
 Progresso 31/05:
 Inizio sito web: fatto l'html e css per la visualizzazione della temperatura e dell'umidità.
+
+Progresso 01/06:
+Sito web funzionante: abbiamo scritto un programma in java che sovrascrive la riga del file html (non è molto elegante, ma funziona a dovere) corrispondente alla temperatura e all'umidità.
 
