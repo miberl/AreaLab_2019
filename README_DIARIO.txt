@@ -19,7 +19,16 @@ Progresso 01/06:
 Inizio sito web per la visualizzazione della temperatura e dell'umidità, punto della situazione dopo una settimana di lavoro.
 
 Progresso 03/06:
-Pianificazione del lavoro per la settimana, sito web: abbiamo scritto un programma in java che sovrascrive la riga del file html corrispondente alla temperatura e all'umidità, in questo modo quando viene aggiornata la pagina web si aggiornano anche i valori della temperatura e dell'umidita'.
+Pianificazione del lavoro per la settimana, sito web: abbiamo scritto un programma in java che sovrascrive la riga del file html corrispondente alla temperatura e all'umidità, in questo modo aggiornando la pagina web si aggiornano anche i valori della temperatura e dell'umidita'.
 
 Progresso 04/06:
-Abbiamo scritto un progrmma java che ricevuta la temperatura e l'umidita' attraverso Arduino RX, li scrive, insieme al numero di rilevazione, su un foglio CSV, per poterli analizzare successivamente.
+Abbiamo scritto un progrmma java ogni 10 minuti rileva la temperatura e l'umidita' e li scrive, insieme alla data ed all'ora di rilevamento, su un foglio CSV, per poterli analizzare.
+
+Progresso 05/06:
+Un'altro programma, ogni qualvolta viene rilevato un movimento lo scrive, sempre insieme alla data ed all'ora, su un foglio CSV.
+
+Progresso 06/07:
+Stiamo implementando un modo, in java, per realizzare i grafici di tutte e tre i rilevamenti (temperatura, umidita' e movimento).
+
+Progresso 07/07:
+I grafici funzionano e sia adattano automaticamente alla grandezza misurata, aumentando la scala dell'asse x in base al passaggio del tempo. 
